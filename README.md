@@ -10,7 +10,7 @@ Usage: ts.py [options]
 
       Options:
         -h, --help            show this help message and exit
-        -u USER, --user=USER  User for login if not current user
+        -u USER, --user=USER  User for login 
         -p PASSWORD, --password=PASSWORD
                               Password to use when connecting
         -f FILE, --file=FILE  write binlog to file
