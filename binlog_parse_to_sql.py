@@ -20,7 +20,7 @@ import optparse
 def main():
         p = optparse.OptionParser()
 	p.add_option('-u','--user',type='string',dest='user',default='root',
-			help='User for login if not current user')
+			help='User for login ')
 	p.add_option('-p','--password',type='string',dest='password',
                         help='Password to use when connecting')
         p.add_option('-f','--file',type="string",dest='filename',
