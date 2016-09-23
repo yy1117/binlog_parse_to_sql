@@ -27,8 +27,8 @@ def main():
         p.add_option('-s','--socket',type='string',dest='socket',
                       help='The socket file to use for connection.')
         p.add_option('-f','--file',type="string",dest='filename',
-                        help="write binlog to file",metavar='FILE')
-        p.add_option('-b','--report',dest='binlog',help="incoming parse binlogfile For Example:mysqlbinlog  --no-defaults --base64-output=decode-rows -v -v mysql-bin.00000x",metavar='binlog')
+                        help="incoming parse binlogfile For Example:mysqlbinlog  --no-defaults --base64-output=decode-rows -v -v mysql-bin.00000x",metavar='FILE')
+        p.add_option('-b','--report',dest='binlog',help="write format binlog to normal sql",metavar='binlog')
         print "\n      ==========================================================================================\n======Author:GuiJiaoQi&XuYou                                              			=======\n======For Example:python ts.py -u user -p password -f mysql-bin.00000x.sql -b binlog_to_sql.sql =======\n      ==========================================================================================\n"
         (options, arguments) = p.parse_args() 
         out_in_binlog = options.filename 
