@@ -17,6 +17,8 @@ Usage: ts.py [options]
         -u USER, --user=USER  User for login 
         -p PASSWORD, --password=PASSWORD
                               Password to use when connecting
+        -s SOCKET, --socket=SOCKET
+                        The socket file to use for connection.
         -f FILE, --file=FILE  write binlog to file
         -b binlog, --report=binlog
                               incoming parse binlogfile For Example:mysqlbinlog
