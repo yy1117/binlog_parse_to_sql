@@ -65,7 +65,8 @@ def get_columns(db_tb_name):
 		row1 = cursor.fetchall()
 		cls = str(row1[0])
 		cls = cls.decode('utf-8');
-		list_cls =  cls.replace('u','').replace('\'','').replace('(','').replace(',)','').split(',')
+		#list_cls =  cls.replace('u','').replace('\'','').replace('(','').replace(',)','').split(',')
+		list_cls = cls.replace("u'",'').replace('\'','').replace('(','').replace(',)','').split(',')
 		len_li = len(list_cls)
 		return list_cls
 	except Exception as e:
@@ -115,7 +116,10 @@ while True:
 			ixx1 =  i.replace('###   @'+str(ix1),list_cls[int(ix1)-1]), 
 			ixx1 = ''.join(ixx1);   
 			if (int(ix1) == len(list_cls)):
-				line =  re.sub('/.* */','',ixx1) 
+				#line =  re.sub('/.* */','',ixx1)
+				line = re.sub('\(\d+\)',' ',ixx1)
+				line =  re.sub('/\*.*/','',line)
+				                             
 	                        current += line.replace('\n','').replace("('",'').replace("\\n'",'').replace(',)','').replace('\\n"','').replace('("','').replace('(255)','').replace('(65535)','')
 				lines += current
 				
@@ -141,8 +145,9 @@ while True:
                 		else:
                         		res.write(lines+"\n")
 			else:
-				line = re.sub('/.* */',',',ixx1)  
-			
+				#line = re.sub('/.* */',',',ixx1)  
+				line = re.sub('\(\d+\)',' ',ixx1)
+                                line = re.sub('/\*.*/',',',line)
 			current += line.replace('\n','').replace("('",'').replace("\\n'",'').replace(',)','').replace('\\n"','').replace('("','').replace('(255)','').replace('(65535)','')
 		else: 
 			current += i.replace('### ','').replace('\n',' ')
