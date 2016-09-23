@@ -24,6 +24,8 @@ def main():
 			help='User for login ')
 	p.add_option('-p','--password',type='string',dest='password',
                         help='Password to use when connecting')
+        p.add_option('-s','--socket',type='string',dest='socket',
+                      help='The socket file to use for connection.')
         p.add_option('-f','--file',type="string",dest='filename',
                         help="write binlog to file",metavar='FILE')
         p.add_option('-b','--report',dest='binlog',help="incoming parse binlogfile For Example:mysqlbinlog  --no-defaults --base64-output=decode-rows -v -v mysql-bin.00000x",metavar='binlog')
@@ -34,7 +36,7 @@ def main():
 	if str(out_in_binlog) == 'None'  :
 		p.print_help() 
 	
-	return str(out_in_binlog)+','+str(binlog_to_sql)+','+str(options.user)+','+str(options.password)
+	return str(out_in_binlog)+','+str(binlog_to_sql)+','+str(options.user)+','+str(options.password)+','+str(options.socket)
 
 
 
@@ -46,8 +48,13 @@ if main.split(',')[0] == 'None':
 else:
 	user=main.split(',')[2]
 	passwd=main.split(',')[3]
+	socket=main.split(',')[4]
 
-conn1=MySQLdb.connect(host="localhost",user=user,passwd=passwd,port=3306,db="information_schema",read_default_file="/etc/my.cnf",charset="utf8")
+if socket == 'None':
+        conn1=MySQLdb.connect(host="localhost",user=user,passwd=passwd,port=3306,db="information_schema",read_default_file="/etc/my.cnf",charset="utf8")
+else:
+        conn1=MySQLdb.connect(host="localhost",user=user,passwd=passwd,port=3306,db="information_schema",read_default_file="/etc/my.cnf",charset="utf8",unix_socket=socket)
+        
 cursor=conn1.cursor()
 
 def get_columns(db_tb_name):
