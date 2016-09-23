@@ -19,8 +19,9 @@ Usage: ts.py [options]
                               Password to use when connecting
         -s SOCKET, --socket=SOCKET
                         The socket file to use for connection.
-        -f FILE, --file=FILE  write binlog to file
-        -b binlog, --report=binlog
+        -f FILE, --file=FILE 
                               incoming parse binlogfile For Example:mysqlbinlog
                               --no-defaults --base64-output=decode-rows -v -v mysql-
                               bin.00000x
+        -b binlog, --report=binlog
+                              write format binlog to normal sql
