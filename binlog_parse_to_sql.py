@@ -40,7 +40,6 @@ def main():
 	if str(out_in_binlog) == 'None'  :
 		p.print_help() 
 	
-	#return str(out_in_binlog)+','+str(binlog_to_sql)+','+str(options.user)+','+str(options.password)+','+str(options.socket)
 	return str(out_in_binlog)+','+str(binlog_to_sql)+','+str(options.user)+','+str(options.password)+','+str(options.socket)+','+str(options.tb_file)+','+str(options.table)
 
 
@@ -124,7 +123,6 @@ while True:
 			ixx1 =  i.replace('###   @'+str(ix1),list_cls[int(ix1)-1]), 
 			ixx1 = ''.join(ixx1);   
 			if (int(ix1) == len(list_cls)):
-				#line =  re.sub('/.* */','',ixx1)
 				line = re.sub('\(\d+\)',' ',ixx1)
 				line =  re.sub('/\*.*/','',line)
 				                             
@@ -140,7 +138,6 @@ while True:
                         			tbl.write("INSERT  "+lineRe.group(1).encode('utf-8')+" VALUES("+re.sub('\w+=','',lineRe.group(2).encode('utf-8'))+");\n")
 					else:	
                         			res.write("INSERT  "+lineRe.group(1).encode('utf-8')+" VALUES("+re.sub('\w+=','',lineRe.group(2).encode('utf-8'))+");\n")
-                        		#res.write("INSERT  "+lineRe.group(1).encode('utf-8')+" VALUES("+re.sub('\w+=','',lineRe.group(2).encode('utf-8'))+");\n")
                 		elif lines.find('UPDATE') !=-1:
                         		lineRe = re.search('UPDATE (.*`) WHERE(.*) SET(.*)',lines)
                         		if not lineRe:
@@ -151,7 +148,6 @@ while True:
 					else:
 	                        		res.write("UPDATE "+lineRe.group(1).encode('utf-8')+" SET "+lineRe.group(3).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
 
-                        		#res.write("UPDATE "+lineRe.group(1).encode('utf-8')+" SET "+lineRe.group(3).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
                 		elif lines.find('DELETE') !=-1:
                         		lineRe = re.search('DELETE (.*`) WHERE(.*)',lines)
                         		if not lineRe:
@@ -161,11 +157,9 @@ while True:
 	                        		tbl.write("DELETE FROM  "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
 					else:
 	                        		res.write("DELETE FROM  "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
-                        		#res.write("DELETE FROM  "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
                 		else:
                         		res.write(lines+"\n")
 			else:
-				#line = re.sub('/.* */',',',ixx1)  
 				line = re.sub('\(\d+\)',' ',ixx1)
                                 line = re.sub('/\*.*/',',',line)
 			current += line.replace('\n','').replace("('",'').replace("\\n'",'').replace(',)','').replace('\\n"','').replace('("','').replace('(255)','').replace('(65535)','')
