@@ -14,14 +14,17 @@ Usage: ts.py [options]
 
       Options:
         -h, --help            show this help message and exit
-        -u USER, --user=USER  User for login 
+        -u USER, --user=USER  User for login
         -p PASSWORD, --password=PASSWORD
                               Password to use when connecting
         -s SOCKET, --socket=SOCKET
-                        The socket file to use for connection.
-        -f FILE, --file=FILE 
-                              incoming parse binlogfile For Example:mysqlbinlog
+                              The socket file to use for connection.
+        -f FILE, --file=FILE  incoming parse binlogfile For Example:mysqlbinlog
                               --no-defaults --base64-output=decode-rows -v -v mysql-
                               bin.00000x
         -b binlog, --report=binlog
                               write format binlog to normal sql
+        -a TB_FILE, --single-tables-file=TB_FILE
+                              grep single table to normal sql file
+        -t TABLE, --table=TABLE
+                              specify table
