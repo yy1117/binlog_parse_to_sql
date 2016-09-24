@@ -29,14 +29,19 @@ def main():
         p.add_option('-f','--file',type="string",dest='filename',
                         help="incoming parse binlogfile For Example:mysqlbinlog  --no-defaults --base64-output=decode-rows -v -v mysql-bin.00000x",metavar='FILE')
         p.add_option('-b','--report',dest='binlog',help="write format binlog to normal sql",metavar='binlog')
-        print "\n      ==========================================================================================\n======Author:GuiJiaoQi&XuYou                                              			=======\n======For Example:python ts.py -u user -p password -f mysql-bin.00000x.sql -b binlog_to_sql.sql =======\n      ==========================================================================================\n"
+        p.add_option('-a','--single-tables-file',dest='tb_file',help="grep single table to normal sql file")
+	p.add_option('-t','--table',dest='table',help='specify table')
+        #print "\n      ==========================================================================================\n======Author:GuiJiaoQi&XuYou                                              			=======\n======For Example:python ts.py -u user -p password -f mysql-bin.00000x.sql -b binlog_to_sql.sql =======\n      ==========================================================================================\n"
+        print "\n      ==========================================================================================\n======Author:GuiJiaoQi&XuYou                                              			=======\n======For Example:python ts.py -u user -p password -f mysql-bin.00000x.sql -b binlog_to_sql.sql    =======\n======		 :python ts.py -u user -p password -t tb_name -f mysql-bin.00000x.sql -a single_tb_.sql =======\n      ==========================================================================================\n"
+
         (options, arguments) = p.parse_args() 
         out_in_binlog = options.filename 
 	binlog_to_sql = options.binlog
 	if str(out_in_binlog) == 'None'  :
 		p.print_help() 
 	
-	return str(out_in_binlog)+','+str(binlog_to_sql)+','+str(options.user)+','+str(options.password)+','+str(options.socket)
+	#return str(out_in_binlog)+','+str(binlog_to_sql)+','+str(options.user)+','+str(options.password)+','+str(options.socket)
+	return str(out_in_binlog)+','+str(binlog_to_sql)+','+str(options.user)+','+str(options.password)+','+str(options.socket)+','+str(options.tb_file)+','+str(options.table)
 
 
 
@@ -88,9 +93,12 @@ def _get_table_name(i):
 
 binlog_to_sql =  main.split(',')[1]
 out_in_binlog = main.split(',')[0]
+single_table_name = main.split(',')[5]
+table_name = main.split(',')[6]
 
 res = open(binlog_to_sql,'w')
 fh = open(out_in_binlog,'r')
+tbl=open(single_table_name,'w')
 
 
 
@@ -128,20 +136,32 @@ while True:
                         		if not lineRe:
                                 		#res.write(lines.encode('utf-8')+"\n")
                                 		continue
-                        		res.write("INSERT  "+lineRe.group(1).encode('utf-8')+" VALUES("+re.sub('\w+=','',lineRe.group(2).encode('utf-8'))+");\n")
+                                	if lineRe.group(1).encode('utf-8').replace('`','').split('.')[1] == table_name:
+                        			tbl.write("INSERT  "+lineRe.group(1).encode('utf-8')+" VALUES("+re.sub('\w+=','',lineRe.group(2).encode('utf-8'))+");\n")
+					else:	
+                        			res.write("INSERT  "+lineRe.group(1).encode('utf-8')+" VALUES("+re.sub('\w+=','',lineRe.group(2).encode('utf-8'))+");\n")
+                        		#res.write("INSERT  "+lineRe.group(1).encode('utf-8')+" VALUES("+re.sub('\w+=','',lineRe.group(2).encode('utf-8'))+");\n")
                 		elif lines.find('UPDATE') !=-1:
                         		lineRe = re.search('UPDATE (.*`) WHERE(.*) SET(.*)',lines)
                         		if not lineRe:
                                 		#res.write(lines.encode('utf-8')+"\n")  
                                 		continue
-                        
-                        		res.write("UPDATE "+lineRe.group(1).encode('utf-8')+" SET "+lineRe.group(3).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
+                        		if lineRe.group(1).encode('utf-8').replace('`','').split('.')[1] == table_name:
+						tbl.write("UPDATE "+lineRe.group(1).encode('utf-8')+" SET "+lineRe.group(3).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
+					else:
+	                        		res.write("UPDATE "+lineRe.group(1).encode('utf-8')+" SET "+lineRe.group(3).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
+
+                        		#res.write("UPDATE "+lineRe.group(1).encode('utf-8')+" SET "+lineRe.group(3).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
                 		elif lines.find('DELETE') !=-1:
                         		lineRe = re.search('DELETE (.*`) WHERE(.*)',lines)
                         		if not lineRe:
                                 		#res.write(lines.encode('utf-8')+"\n")  
                                 		continue
-                        		res.write("DELETE FROM  "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
+                                	if lineRe.group(1).encode('utf-8').replace('`','').split('.')[1] == table_name:
+	                        		tbl.write("DELETE FROM  "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
+					else:
+	                        		res.write("DELETE FROM  "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
+                        		#res.write("DELETE FROM  "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
                 		else:
                         		res.write(lines+"\n")
 			else:
