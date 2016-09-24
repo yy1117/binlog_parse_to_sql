@@ -1,6 +1,7 @@
 # binlog_parse_to_sql
 binlog python解析
 MySQL_Binlog_Parse_to_sql
+单表导出
 #工具运行步骤
       1.binlog—format= row
       2.mysqlbinlog --no-defaults --base64-output=decode-rows -v -v mysql-bin.00000x >mysql-bin.00000x.sql
