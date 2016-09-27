@@ -154,9 +154,9 @@ while True:
                                 		#res.write(lines.encode('utf-8')+"\n")  
                                 		continue
                                 	if lineRe.group(1).encode('utf-8').replace('`','').split('.')[1] == table_name:
-	                        		tbl.write("DELETE FROM  "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
+	                        		tbl.write("DELETE "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
 					else:
-	                        		res.write("DELETE FROM  "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
+	                        		res.write("DELETE "+lineRe.group(1).encode('utf-8')+" WHERE "+lineRe.group(2).encode('utf-8').replace(',',' AND ')+";\n")
                 		else:
                         		res.write(lines+"\n")
 			else:
